@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,74 +13,26 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
-
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link FragmentOne.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link FragmentOne#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class FragmentOne extends Fragment {
-    TextView textViewFragmentOne;
-    Button buttonFragmentOne;
-    ImageView circulo;
-    EditText editTextFragmentOne;
-    Button buttonAzul, buttonVerde, buttonNaranja, buttonRojo;
-
-
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    private EditText editTextFragmentOne;
+    private ImageView circulo;
+    private int colorId = android.R.color.black;
+    private Button buttonAzul;
+    private Button buttonRojo;
+    private Button buttonVerde;
+    private Button buttonNaranja;
+    private Button buttonFragmentOne;
     private OnFragmentInteractionListener mListener;
-
     public FragmentOne() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FragmentOne.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FragmentOne newInstance(String param1, String param2) {
-        FragmentOne fragment = new FragmentOne();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    private void changeColor() {
+        circulo.setColorFilter(ContextCompat.getColor(getContext(), colorId));
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
-    public TextView getTextViewFragmentOne() {
-        return textViewFragmentOne;
-    }
-
-    public void setTextViewFragmentOne(TextView textViewFragmentOne) {
-        this.textViewFragmentOne = textViewFragmentOne;
+    public static FragmentOne newInstance() {
+        return new FragmentOne();
     }
 
     @Override
@@ -88,30 +41,53 @@ public class FragmentOne extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_fragment_one, container, false);
         editTextFragmentOne = rootView.findViewById(R.id.editTextFragmentOne);
         buttonFragmentOne = rootView.findViewById(R.id.buttonFragmentOne);
-
-        String message = "Mensaje: " + mParam1 + mParam2;
-        //textViewFragmentOne.setText(mParam1);
-        buttonFragmentOne = rootView.findViewById(R.id.buttonFragmentOne);
-        buttonFragmentOne.setOnClickListener (new View.OnClickListener() {
-
+        circulo = rootView.findViewById(R.id.circulo);
+        buttonFragmentOne.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                onButtonPressed(null);
+            public void onClick(View view) {
+                onButtonPressed(colorId);
             }
         });
-
+        Button colorOne = rootView.findViewById(R.id.buttonAzul);
+        Button colorTwo = rootView.findViewById(R.id.buttonVerde);
+        Button colorThree = rootView.findViewById(R.id.buttonNaranja);
+        Button colorFour = rootView.findViewById(R.id.buttonRojo);
+        colorOne.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                colorId = android.R.color.holo_blue_dark;
+                changeColor();
+            }
+        });
+        colorTwo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                colorId = android.R.color.holo_green_dark;
+                changeColor();
+            }
+        });
+        colorThree.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                colorId = android.R.color.holo_orange_dark;
+                changeColor();
+            }
+        });
+        colorFour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                colorId = android.R.color.holo_red_dark;
+                changeColor();
+            }
+        });
         return rootView;
-
-
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    private void onButtonPressed(int colorId) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onFragmentInteraction(editTextFragmentOne.getText().toString(), colorId);
         }
     }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -122,25 +98,14 @@ public class FragmentOne extends Fragment {
                     + " must implement OnFragmentInteractionListener");
         }
     }
-
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void onFragmentInteraction(String text, int colorId);
     }
 }
